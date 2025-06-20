@@ -1,0 +1,6 @@
+# Ignore a pasta node_modules
+node_modules
+
+# Ignore arquivos relacionados às chaves de API
+.env
+mary-fifi-0f212f7060f2.json
