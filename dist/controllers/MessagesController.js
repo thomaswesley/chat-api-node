@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { config } from 'dotenv';
 import Messages from '../models/Messages.js';
+import { differenceInMinutes } from 'date-fns';
 config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const systemPrompt = `
@@ -18,17 +19,25 @@ Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clie
 9. Reconheça e entenda variações naturais nas perguntas dos clientes, como "Quais sabores vocês têm?", "O que tem de pizza?", "Pode me dizer os sabores?" e responda listando as opções do cardápio de forma clara e amigável.
 
 ### Atendimento inicial:
-- Ao dar boas-vindas, sempre mencione o nome da pizzaria: "Olá! Bem-vindo à Pagana Pizzaria, como posso ajudar você hoje?"
 - Se o cliente perguntar sobre os sabores de pizza, responda listando as opções e diga: "Posso te recomendar a Calabresa, que é uma das mais pedidas?"
 
 ### Caso o cliente não queira pizza:
-- Diga: "Entendo, mas que tal experimentar nossa Quatro Queijos especial? É cremosa, feita com queijos selecionados, e está saindo quentinha do forno!"
+- Diga: "Entendo, mas, que tal experimentar nossa Quatro Queijos especial? É cremosa, feita com queijos selecionados, e está saindo quentinha do forno!"
 
-### Quando o cliente escolher um sabor de pizza:
+### Quando o cliente escolher um sabor de pizza e não tiver escolhido bebida:
 - Diga: "Ótima escolha! Deseja adicionar uma bebida gelada para acompanhar? Temos refrigerantes e sucos."
 
-### Quando o cliente escolher uma bebida:
+### Quando o cliente escolher uma bebida ou sobremesa, e não tiver escolhido pizza:
+- Diga: "Perfeito! Para finalizar, posso te recomendar a pizza de Calabresa, que é uma das mais pedidas?"
+
+### Quando o cliente escolher uma bebida ou sobremesa, e recusar a pizza de Calabresa:
+- Diga: "Entendo, mas, que tal experimentar nossa Quatro Queijos especial? É cremosa, feita com queijos selecionados, e está saindo quentinha do forno!"
+
+### Quando o cliente escolher uma bebida, já tiver escolhido pizza e não tiver escolhido sobremesa:
 - Diga: "Perfeito! Para finalizar, posso te oferecer uma sobremesa? Nosso brownie com calda de chocolate é irresistível!"
+
+### Quando o pedido estiver confirmado: 
+- O tempo de entrega é aproximadamente 50 minutos.
 
 ### Cardápio:
 - Pizzas: Margherita, Calabresa, Portuguesa, Quatro Queijos.
@@ -46,8 +55,27 @@ export default class MessagesController {
             return;
         }
         try {
-            await Messages.saveMessage({ sender: 'user', content });
             const history = await Messages.getMessages();
+            const now = new Date();
+            const lastMessage = history.length > 0 ? history[history.length - 1] : null;
+            const diffMinutes = lastMessage
+                ? differenceInMinutes(now, new Date(lastMessage.created_at))
+                : null;
+            const sendWelcomeMessage = !lastMessage || (diffMinutes !== null && diffMinutes >= 30);
+            //Caso a última mensagem tenha mais de 30 minutos, imprimir essa mensagem.
+            //A IA não tá respeitando frases literais
+            if (sendWelcomeMessage) {
+                const welcomeMessage = 'Olá! Me chamo Scarlett Bella Pizza. Bem-vindo à Pagana Pizzaria, como posso ajudar você hoje?';
+                await Messages.saveMessage({ sender: 'user', content });
+                await Messages.saveMessage({ sender: 'bot', content: welcomeMessage });
+                res.status(200).json({
+                    error: false,
+                    message: 'Mensagem enviada com sucesso!',
+                    data: welcomeMessage,
+                });
+                return;
+            }
+            await Messages.saveMessage({ sender: 'user', content });
             const chatHistory = [
                 {
                     role: 'user',
