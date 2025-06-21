@@ -1,13 +1,14 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-import express from 'express';
+import express from "express";
+import bodyParser from "body-parser";
 import http from 'http';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
 import { Server as SocketIOServer } from 'socket.io';
 
 import messagesRoutes from './routes/messagesRoutes.js'; 
 
+dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
@@ -19,7 +20,7 @@ server.listen(porta, () => {
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.APP_TWS_SOFTWARE_FRONTEND,
+  origin: process.env.APP_PAGANA_SOLUCOES_FRONTEND,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -40,6 +41,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-app.use('/images', express.static('images'));
+app.use('/images', express.static('images')); 
 
 app.use('/', messagesRoutes);

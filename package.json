@@ -4,9 +4,9 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "dev": "nodemon --watch src --ext ts --exec \"ts-node --esm\" src/app.ts",
-    "build": "tsc",
-    "start": "nodemon node dist/app.ts"
+    "dev": "tsc --watch",
+    "start": "nodemon dist/app.js",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -31,7 +32,6 @@
     "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.14.1",
-    "nodemailer": "^6.9.1",
     "socket.io": "^4.6.1"
   },
   "engines": {
