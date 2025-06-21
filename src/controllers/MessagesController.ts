@@ -114,5 +114,28 @@ export default class MessagesController {
     }
   }
 
+  static async getMessages(req: Request, res: Response): Promise<void> {
+
+    try {
+
+      const messages = await Messages.getMessages();
+
+      res.status(200).json({
+        error: false,
+        message: 'Mensagens encontradas com sucesso!',
+        data: messages,
+      });
+
+    } catch (error) {
+
+      console.error('Erro ao buscar mensagens:', error);
+      
+      res.status(500).json({
+        error: true,
+        message: 'Erro interno ao buscar mensagens.',
+      });
+    }
+  }
+
   
 }
