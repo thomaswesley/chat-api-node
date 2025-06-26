@@ -137,7 +137,7 @@ DB_DATABASE=pagana
 ## 🔗 Projeto Completo
 
 - Frontend: [https://github.com/thomaswesley/pagana-react](https://github.com/thomaswesley/pagana-react)
-- Demo: [https://charlene-pizzaria.vercel.app](https://charlene-pizzaria.vercel.app)
+- Demo: [https://charlene.ia.thomaswesleysoftware.com.br](https://charlene.ia.thomaswesleysoftware.com.br)
 
 ---
 

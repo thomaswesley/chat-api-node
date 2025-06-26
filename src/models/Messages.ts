@@ -4,10 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const saveMessage = async (message: { sender: 'user' | 'bot'; content: string }): Promise<any> => {
-
-  //const now = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
-  //const createdAt = new Date(now);
-  const createdAt = new Date(); // UTC puro e confiável
+  
+  const createdAt = new Date();
 
   try {
 
