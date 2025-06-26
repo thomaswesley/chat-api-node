@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server as SocketIOServer } from 'socket.io';
-//import messagesRoutes from './src/routes/messagesRoutes.js';
+import messagesRoutes from './src/routes/messagesRoutes.js';
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -31,7 +31,7 @@ app.use(cors({
 }));
 app.use(express.static('public'));
 app.use('/images', express.static('images'));
-//app.use('/', messagesRoutes);
+app.use('/', messagesRoutes);
 /*app.use((req, res, next) => {
   //req.io = io;
   next();
