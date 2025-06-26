@@ -5,11 +5,14 @@ dotenv.config();
 
 const saveMessage = async (message: { sender: 'user' | 'bot'; content: string }): Promise<any> => {
 
+  const now = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
+  const createdAt = new Date(now);
+
   try {
 
     const connection = await connectDatabaseMySQL();
-    const sql = 'INSERT INTO messages (sender, content) VALUES (?, ?)';
-    const values = [message.sender, message.content];
+    const sql = 'INSERT INTO messages (sender, content, created_at) VALUES (?, ?, ?)';
+    const values = [message.sender, message.content, createdAt];
 
     const [result] = await connection.execute(sql, values);
 
@@ -28,7 +31,7 @@ const getMessages = async (): Promise<any[]> => {
   try {
 
     const connection = await connectDatabaseMySQL();
-    const sql = 'SELECT sender, content FROM messages ORDER BY created_at ASC';
+    const sql = 'SELECT sender, content, created_at FROM messages ORDER BY created_at ASC';
 
     const [rows] = await connection.execute(sql);
 

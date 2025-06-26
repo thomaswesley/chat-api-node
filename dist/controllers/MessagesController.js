@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { config } from 'dotenv';
 import Messages from '../models/Messages.js';
-import { differenceInMinutes } from 'date-fns';
 config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const systemPrompt = `
@@ -19,6 +18,7 @@ Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clie
 9. Reconheça e entenda variações naturais nas perguntas dos clientes, como "Quais sabores vocês têm?", "O que tem de pizza?", "Pode me dizer os sabores?" e responda listando as opções do cardápio de forma clara e amigável.
 
 ### Atendimento inicial:
+- Diga: "Olá! Eu me chamo Charlene 😍. Bem-vindo(a) à Pagana Pizzaria, como posso ajudar você hoje?"
 - Se o cliente perguntar sobre os sabores de pizza, responda listando as opções e diga: "Posso te recomendar a Calabresa, que é uma das mais pedidas?"
 
 ### Caso o cliente não queira pizza:
@@ -40,13 +40,15 @@ Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clie
 - O tempo de entrega é aproximadamente 50 minutos.
 
 ### Cardápio:
-- Pizzas: Margherita, Calabresa, Portuguesa, Quatro Queijos.
-- Bebidas: Coca-Cola, Guaraná, Suco de Laranja, Suco de Uva.
-- Sobremesas: Brownie com calda de chocolate, Pudim, Sorvete de creme.
+- Pizzas: Margherita, Calabresa, Portuguesa, Quatro Queijos, Pepperoni, Frango com Catupiry, Vegetariana, Mexicana, Napolitana, Bacon com Cheddar.
+- Bebidas: Coca-Cola, Guaraná, Suco de Laranja, Suco de Uva, Suco de Abacaxi, Água Mineral, Água com Gás, Coca-Cola Zero, Guaraná Zero, Chá Gelado.
+- Sobremesas: Brownie com calda de chocolate, Pudim, Sorvete de creme, Torta de Limão, Petit Gateau, Cheesecake, Mousse de Maracujá, Mousse de Chocolate, Pavê, Açaí na Tigela.
 `;
 export default class MessagesController {
     static async postMessage(req, res) {
-        const { content } = req.body;
+        const { content, indiceArrayNewMessage } = req.body;
+        const io = req.app.get('io');
+        console.log('content', content);
         if (!content) {
             res.status(400).json({
                 error: true,
@@ -55,27 +57,23 @@ export default class MessagesController {
             return;
         }
         try {
-            const history = await Messages.getMessages();
-            const now = new Date();
-            const lastMessage = history.length > 0 ? history[history.length - 1] : null;
-            const diffMinutes = lastMessage
-                ? differenceInMinutes(now, new Date(lastMessage.created_at))
-                : null;
-            const sendWelcomeMessage = !lastMessage || (diffMinutes !== null && diffMinutes >= 30);
-            //Caso a última mensagem tenha mais de 30 minutos, imprimir essa mensagem.
-            //A IA não tá respeitando frases literais
-            if (sendWelcomeMessage) {
-                const welcomeMessage = 'Olá! Me chamo Scarlett Bella Pizza. Bem-vindo à Pagana Pizzaria, como posso ajudar você hoje?';
-                await Messages.saveMessage({ sender: 'user', content });
-                await Messages.saveMessage({ sender: 'bot', content: welcomeMessage });
-                res.status(200).json({
-                    error: false,
-                    message: 'Mensagem enviada com sucesso!',
-                    data: welcomeMessage,
-                });
-                return;
-            }
             await Messages.saveMessage({ sender: 'user', content });
+            const dataUser = {
+                "message": content,
+                "time": new Date().toString(),
+                "senderId": 1,
+                "msgStatus": {
+                    "isSent": true,
+                    "isDelivered": true,
+                    "isSeen": true
+                },
+                "indiceArrayNewMessage": indiceArrayNewMessage
+            };
+            io.emit('message-saved', {
+                sender: 'user',
+                dataUser,
+            });
+            const history = await Messages.getMessages();
             const chatHistory = [
                 {
                     role: 'user',
@@ -97,20 +95,32 @@ export default class MessagesController {
                     temperature: 0.7,
                 },
             });
-            const result = await chat.sendMessage(content);
-            const aiResponse = result.response.text();
-            if (!aiResponse) {
-                res.status(500).json({
-                    error: true,
-                    message: 'Não foi possível gerar uma resposta da IA.',
-                });
-                return;
-            }
-            await Messages.saveMessage({ sender: 'bot', content: aiResponse });
+            chat.sendMessage(content).then(async (result) => {
+                const aiResponse = result.response.text();
+                if (aiResponse) {
+                    await Messages.saveMessage({ sender: 'bot', content: aiResponse });
+                    const dataBot = {
+                        "message": aiResponse,
+                        "time": new Date().toString(),
+                        "senderId": 3,
+                        "indiceArrayNewMessage": indiceArrayNewMessage
+                    };
+                    io.emit('bot-response', {
+                        sender: 'bot',
+                        content: dataBot
+                    });
+                }
+                else {
+                    res.status(500).json({
+                        error: true,
+                        message: 'Não foi possível gerar uma resposta da IA.',
+                    });
+                    return;
+                }
+            });
             res.status(200).json({
                 error: false,
-                message: 'Mensagem enviada com sucesso!',
-                data: aiResponse,
+                message: 'Mensagem enviada com sucesso!'
             });
         }
         catch (error) {
@@ -124,17 +134,37 @@ export default class MessagesController {
     static async getMessages(req, res) {
         try {
             const messages = await Messages.getMessages();
+            const formattedMessages = messages.map((msg) => {
+                const timeFormatted = new Date(msg.created_at).toString();
+                if (msg.sender === 'user') {
+                    return {
+                        message: msg.content,
+                        time: timeFormatted,
+                        senderId: 1,
+                        msgStatus: {
+                            isSent: true,
+                            isDelivered: true,
+                            isSeen: true
+                        }
+                    };
+                }
+                return {
+                    message: msg.content,
+                    time: timeFormatted,
+                    senderId: 3
+                };
+            });
             res.status(200).json({
                 error: false,
                 message: 'Mensagens encontradas com sucesso!',
-                data: messages,
+                data: formattedMessages
             });
         }
         catch (error) {
             console.error('Erro ao buscar mensagens:', error);
             res.status(500).json({
                 error: true,
-                message: 'Erro interno ao buscar mensagens.',
+                message: 'Erro interno ao buscar mensagens.'
             });
         }
     }
