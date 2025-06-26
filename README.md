@@ -137,7 +137,7 @@ DB_DATABASE=pagana
 ## 🔗 Projeto Completo
 
 - Frontend: [https://github.com/thomaswesley/pagana-react](https://github.com/thomaswesley/pagana-react)
-- Demo: [https://charlene.ia.thomaswesleysoftware.com.br](https://charlene.ia.thomaswesleysoftware.com.br)
+- Demo: [https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat](https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat)
 
 ---
 
