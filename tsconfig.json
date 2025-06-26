@@ -12,7 +12,6 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": [
-    "src/**/*",
     "app.ts",
     "app.js",
     "routes",
