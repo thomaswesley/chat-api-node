@@ -1,11 +1,6 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const MessagesController_js_1 = __importDefault(require("../controllers/MessagesController.js"));
-const router = express_1.default.Router();
-router.get('/messages', MessagesController_js_1.default.getMessages);
-router.post('/messages', MessagesController_js_1.default.postMessage);
-exports.default = router;
+import express from 'express';
+import MessagesController from '../controllers/MessagesController.js';
+const router = express.Router();
+router.get('/messages', MessagesController.getMessages);
+router.post('/messages', MessagesController.postMessage);
+export default router;
