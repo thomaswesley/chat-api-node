@@ -4,7 +4,7 @@
     "module": "ES2020",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -13,8 +13,8 @@
   },
   "include": [
     "src/**/*",
-    "src/app.ts",
-    "src/app.js"
+    "app.ts",
+    "app.js"
   ],
   "exclude": [
     "node_modules"
