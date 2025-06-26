@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import { Server as SocketIOServer } from 'socket.io';
-import messagesRoutes from './src/routes/messagesRoutes.js'; 
+import messagesRoutes from './src/routes/messagesRoutes'; 
 
 dotenv.config();
 const app = express();
