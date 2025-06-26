@@ -13,7 +13,8 @@
   },
   "include": [
     "src/**/*",
-    "app.ts"
+    "src/app.ts",
+    "src/app.js"
   ],
   "exclude": [
     "node_modules"
