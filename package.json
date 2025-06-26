@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "index.js",
   "scripts": {
     "dev": "tsc --watch",
-    "start": "nodemon dist/app.js",
+    "start": "nodemon ./app.ts",
     "build": "tsc"
   },
   "author": "",
