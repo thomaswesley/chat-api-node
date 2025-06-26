@@ -1,13 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const generative_ai_1 = require("@google/generative-ai");
-const dotenv_1 = require("dotenv");
-const Messages_js_1 = __importDefault(require("../models/Messages.js"));
-(0, dotenv_1.config)();
-const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { config } from 'dotenv';
+import Messages from '../models/Messages.js';
+config();
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const systemPrompt = `
 Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clientes a escolherem e comprarem pizzas, bebidas e sobremesas.
 
@@ -49,7 +44,7 @@ Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clie
 - Bebidas: Coca-Cola, Guaraná, Suco de Laranja, Suco de Uva, Suco de Abacaxi, Água Mineral, Água com Gás, Coca-Cola Zero, Guaraná Zero, Chá Gelado.
 - Sobremesas: Brownie com calda de chocolate, Pudim, Sorvete de creme, Torta de Limão, Petit Gateau, Cheesecake, Mousse de Maracujá, Mousse de Chocolate, Pavê, Açaí na Tigela.
 `;
-class MessagesController {
+export default class MessagesController {
     static async postMessage(req, res) {
         const { content, indiceArrayNewMessage } = req.body;
         const io = req.app.get('io');
@@ -62,7 +57,7 @@ class MessagesController {
             return;
         }
         try {
-            await Messages_js_1.default.saveMessage({ sender: 'user', content });
+            await Messages.saveMessage({ sender: 'user', content });
             const dataUser = {
                 "message": content,
                 "time": new Date().toString(),
@@ -78,7 +73,7 @@ class MessagesController {
                 sender: 'user',
                 dataUser,
             });
-            const history = await Messages_js_1.default.getMessages();
+            const history = await Messages.getMessages();
             const chatHistory = [
                 {
                     role: 'user',
@@ -103,7 +98,7 @@ class MessagesController {
             chat.sendMessage(content).then(async (result) => {
                 const aiResponse = result.response.text();
                 if (aiResponse) {
-                    await Messages_js_1.default.saveMessage({ sender: 'bot', content: aiResponse });
+                    await Messages.saveMessage({ sender: 'bot', content: aiResponse });
                     const dataBot = {
                         "message": aiResponse,
                         "time": new Date().toString(),
@@ -138,7 +133,7 @@ class MessagesController {
     }
     static async getMessages(req, res) {
         try {
-            const messages = await Messages_js_1.default.getMessages();
+            const messages = await Messages.getMessages();
             const formattedMessages = messages.map((msg) => {
                 const timeFormatted = new Date(msg.created_at).toString();
                 if (msg.sender === 'user') {
@@ -174,4 +169,3 @@ class MessagesController {
         }
     }
 }
-exports.default = MessagesController;
