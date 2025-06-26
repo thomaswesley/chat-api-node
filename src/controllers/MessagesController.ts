@@ -169,7 +169,8 @@ export default class MessagesController {
       
       const formattedMessages = messages.map((msg) => {
 
-        const timeFormatted = new Date(msg.created_at).toString();
+        //const timeFormatted = new Date(msg.created_at).toString();
+        const timeFormatted = new Date(msg.created_at).toISOString();
 
         if (msg.sender === 'user') {
 
