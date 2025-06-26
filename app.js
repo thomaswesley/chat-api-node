@@ -3,7 +3,7 @@ import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Server as SocketIOServer } from 'socket.io';
-import messagesRoutes from './routes/messagesRoutes.js';
+import messagesRoutes from './routes/messagesRoutes.js'
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
