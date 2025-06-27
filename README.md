@@ -8,9 +8,10 @@ Microsserviço responsável por gerenciar o histórico de mensagens entre os usu
 ## 📦 Tecnologias Utilizadas
 
 - **Node.js** + **TypeScript**
-- **Express** + **Socket.io**
+- **Express** + **WebSocket**
 - **Google Generative AI (Gemini 1.5)**
-- **MySQL** com Railway
+- **MySQL**
+- **Outros**: Socket.io
 
 ---
 
