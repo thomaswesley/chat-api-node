@@ -126,11 +126,15 @@ Exemplo de `.env`:
 
 ```env
 PORT=3001
-GEMINI_API_KEY=sua-chave-do-gemini
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=senha
 DB_DATABASE=pagana
+
+APP_PAGANA_SOLUCOES_BACKEND=http://localhost:8081
+APP_PAGANA_SOLUCOES_FRONTEND=http://localhost:3000
+
+GEMINI_API_KEY=sua-chave-do-gemini
 ```
 
 ---
