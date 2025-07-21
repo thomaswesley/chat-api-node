@@ -1,7 +1,7 @@
 
-# 🔁 Backend – API Node.js da Charlene (Pagana Pizzaria)
+# 🔁 Backend – API Node.js da Charlene (Gordice Pizzaria)
 
-Microsserviço responsável por gerenciar o histórico de mensagens entre os usuários e a IA **Charlene**, atendente virtual da pizzaria Pagana. As mensagens são processadas por um agente de IA (Gemini 1.5) com regras definidas para oferecer um atendimento humanizado, respeitando o cardápio.
+Microsserviço responsável por gerenciar o histórico de mensagens entre os usuários e a IA **Charlene**, atendente virtual da Gordice Pizzaria. As mensagens são processadas por um agente de IA (Gemini 1.5) com regras definidas para oferecer um atendimento humanizado, respeitando o cardápio.
 
 ---
 
@@ -105,8 +105,8 @@ CREATE TABLE messages (
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/thomaswesley/pagana-api-node
-cd pagana-api-node
+git clone https://github.com/thomaswesley/chat-api-node
+cd chat-api-node
 
 # Instalar dependências
 npm install
@@ -129,10 +129,10 @@ PORT=3001
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=senha
-DB_DATABASE=pagana
+DB_DATABASE=pizzaria
 
-APP_PAGANA_SOLUCOES_BACKEND=http://localhost:8081
-APP_PAGANA_SOLUCOES_FRONTEND=http://localhost:3000
+APP_CHAT_BACKEND=http://localhost:8081
+APP_CHAT_FRONTEND=http://localhost:3000
 
 GEMINI_API_KEY=sua-chave-do-gemini
 ```
@@ -141,7 +141,7 @@ GEMINI_API_KEY=sua-chave-do-gemini
 
 ## 🔗 Projeto Completo
 
-- Frontend: [https://github.com/thomaswesley/pagana-react](https://github.com/thomaswesley/pagana-react)
+- Frontend: [https://github.com/thomaswesley/chat-react](https://github.com/thomaswesley/chat-react)
 - Demo: [https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat](https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat)
 
 ---

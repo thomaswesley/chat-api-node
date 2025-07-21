@@ -12,7 +12,7 @@ const server = http.createServer(app);
 
 const io = new SocketIOServer(server, {
   cors: {
-    origin: process.env.APP_PAGANA_SOLUCOES_FRONTEND,
+    origin: process.env.APP_CHAT_FRONTEND,
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -26,13 +26,12 @@ io.on('connection', (socket) => {
   });
 });
 
-// Exporta o io para uso nos controllers
 app.set('io', io);
 
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.APP_PAGANA_SOLUCOES_FRONTEND,
+  origin: process.env.APP_CHAT_FRONTEND,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

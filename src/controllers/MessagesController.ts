@@ -1,15 +1,14 @@
 import { Request, Response } from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { config } from 'dotenv';
-import Messages from '../models/Messages.js'; 
-import { differenceInMinutes, parseISO } from 'date-fns';
+import Messages from '../models/Messages.js';
 
 config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
 const systemPrompt = `
-Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clientes a escolherem e comprarem pizzas, bebidas e sobremesas.
+Você é um atendente virtual da pizzaria Gordice. Seu objetivo é ajudar os clientes a escolherem e comprarem pizzas, bebidas e sobremesas.
 
 ### Regras gerais:
 1. Ofereça APENAS itens do cardápio: pizzas, bebidas e sobremesas.
@@ -23,7 +22,7 @@ Você é um atendente virtual da pizzaria Pagana. Seu objetivo é ajudar os clie
 9. Reconheça e entenda variações naturais nas perguntas dos clientes, como "Quais sabores vocês têm?", "O que tem de pizza?", "Pode me dizer os sabores?" e responda listando as opções do cardápio de forma clara e amigável.
 
 ### Atendimento inicial:
-- Diga: "Olá! Eu me chamo Charlene 😍. Bem-vindo(a) à Pagana Pizzaria, como posso ajudar você hoje?"
+- Diga: "Olá! Eu me chamo Charlene 😍. Bem-vindo(a) à Gordice Pizzaria, como posso ajudar você hoje?"
 - Se o cliente perguntar sobre os sabores de pizza, responda listando as opções e diga: "Posso te recomendar a Calabresa, que é uma das mais pedidas?"
 
 ### Caso o cliente não queira pizza:
@@ -168,9 +167,6 @@ export default class MessagesController {
       const messages = await Messages.getMessages();
       
       const formattedMessages = messages.map((msg) => {
-
-        //const timeFormatted = new Date(msg.created_at).toString();
-        //const timeFormatted = new Date(msg.created_at).toISOString();
 
         // Garantir que criamos um Date válido, mesmo se for string
         const rawDate = new Date(Date.parse(msg.created_at));

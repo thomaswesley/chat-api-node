@@ -2,8 +2,7 @@ import { connectDatabaseMySQL } from '../db/connectDatabaseMySQL.js';
 import dotenv from 'dotenv';
 dotenv.config();
 const saveMessage = async (message) => {
-    const now = new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' });
-    const createdAt = new Date(now);
+    const createdAt = new Date();
     try {
         const connection = await connectDatabaseMySQL();
         const sql = 'INSERT INTO messages (sender, content, created_at) VALUES (?, ?, ?)';
