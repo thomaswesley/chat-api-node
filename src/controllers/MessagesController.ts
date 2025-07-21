@@ -168,9 +168,9 @@ export default class MessagesController {
       
       const formattedMessages = messages.map((msg) => {
 
-        // Garantir que criamos um Date válido, mesmo se for string
+        //Garantir que criamos um Date válido, mesmo se for string
         const rawDate = new Date(Date.parse(msg.created_at));
-        const timeFormatted = rawDate.toISOString(); // ex: 2025-06-26T04:31:24.000Z
+        const timeFormatted = rawDate.toISOString(); //ex: 2025-06-26T04:31:24.000Z
 
         if (msg.sender === 'user') {
 
