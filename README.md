@@ -1,5 +1,5 @@
 
-# 🔁 Backend – API Node.js da Charlene (Gordice Pizzaria)
+# 🔁 Back-end – API Node.js da Charlene (Gordice Pizzaria)
 
 Microsserviço responsável por gerenciar o histórico de mensagens entre os usuários e a IA **Charlene**, atendente virtual da Gordice Pizzaria. As mensagens são processadas por um agente de IA (Gemini 1.5) com regras definidas para oferecer um atendimento humanizado, respeitando o cardápio.
 
@@ -7,11 +7,20 @@ Microsserviço responsável por gerenciar o histórico de mensagens entre os usu
 
 ## 📦 Tecnologias Utilizadas
 
+### 🔁 Back-end
+
 - **Node.js** + **TypeScript**
 - **Express** + **WebSocket**
 - **Google Generative AI (Gemini 1.5)**
 - **MySQL**
 - **Outros**: Socket.io
+
+### 💻 Front-end
+
+- React JS
+- WebSocket
+- Interface de chat simples e funcional.
+- Mensagens do cliente e resposta da IA em tempo real.
 
 ---
 
@@ -49,7 +58,7 @@ src/
 
 ## 🔌 WebSocket
 
-O backend emite dois eventos para comunicação em tempo real:
+O back-end emite dois eventos para comunicação em tempo real:
 
 - `message-saved`: resposta ao envio do cliente
 - `bot-response`: resposta gerada pela IA
@@ -101,10 +110,12 @@ CREATE TABLE messages (
 
 ---
 
-## ⚙️ Como Executar
+## ⚙️ Como Executar Localmente
+
+### 1. Clone os repositórios:
 
 ```bash
-# Clonar o repositório
+# Backend
 git clone https://github.com/thomaswesley/chat-api-node
 cd chat-api-node
 
@@ -118,9 +129,26 @@ cp .env.example .env
 npm run dev
 ```
 
+```bash
+# Front-end
+git clone https://github.com/thomaswesley/chat-react
+cd chat-react
+
+# Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+
+# Iniciar
+npm run dev
+```
+
 ---
 
 ## 📄 Variáveis de Ambiente
+
+### 1. Back-end:
 
 Exemplo de `.env`:
 
@@ -137,11 +165,19 @@ APP_CHAT_FRONTEND=http://localhost:3000
 GEMINI_API_KEY=sua-chave-do-gemini
 ```
 
+### 2. Front-end:
+
+Exemplo de `.env`:
+
+```env
+NEXT_PUBLIC_APP_CHAT_NODE=http://localhost:8081
+```
+
 ---
 
 ## 🔗 Projeto Completo
 
-- Frontend: [https://github.com/thomaswesley/chat-react](https://github.com/thomaswesley/chat-react)
+- Front-end: [https://github.com/thomaswesley/chat-react](https://github.com/thomaswesley/chat-react)
 - Demo: [https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat](https://charlene.ia.thomaswesleysoftware.com.br/en/apps/chat)
 
 ---
