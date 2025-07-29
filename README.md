@@ -170,7 +170,7 @@ GEMINI_API_KEY=sua-chave-do-gemini
 Exemplo de `.env`:
 
 ```env
-NEXT_PUBLIC_APP_CHAT_NODE=http://localhost:8081
+NEXT_PUBLIC_APP_CHAT_NODE=http://localhost:3000
 ```
 
 ---
