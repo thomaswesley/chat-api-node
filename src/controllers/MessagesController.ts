@@ -140,7 +140,7 @@ export default class MessagesController {
 
     try {
       
-      //await Messages.saveMessage({ sender: 'user', content });
+      await Messages.saveMessage({ sender: 'user', content });
 
       const dataUser = {
                           "message": content,
@@ -190,7 +190,7 @@ export default class MessagesController {
 
         if (aiResponse) {
 
-          //await Messages.saveMessage({ sender: 'bot', content: aiResponse });
+          await Messages.saveMessage({ sender: 'bot', content: aiResponse });
 
           const dataBot = {
                             "message": aiResponse,
